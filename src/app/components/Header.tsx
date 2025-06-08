@@ -17,7 +17,7 @@ export default function Header() {
           <Link href="/" className="flex items-center space-x-2">
             <div className="text-2xl">✨</div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              감성 일기
+              미래의 나에게 전달되는 일기
             </span>
           </Link>
 
