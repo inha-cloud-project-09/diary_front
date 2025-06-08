@@ -60,7 +60,7 @@ export default function HomePage() {
               오늘의 네가 내일의 너에게 보내는
             </p>
             <p className="text-lg md:text-xl text-purple-300/60 font-semibold">
-              시간과 감정을 담은 편지
+              시간과 감정을 담은 일기
             </p>
           </div>
 
@@ -96,7 +96,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="text-center p-6 text-purple-400/50 text-sm">
-        <p>당신의 이야기가 별처럼 빛날 수 있도록</p>
+        <p>당신의 이야기가 데이터로</p>
       </footer>
     </div>
   )

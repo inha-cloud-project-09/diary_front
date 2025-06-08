@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "감성 일기 - 별이 빛나는 밤",
-  description: "매일의 소중한 순간을 별처럼 기록하세요",
+  title: "오늘의 내가 내일의 나에게",
+  description: "",
 };
 
 export default function RootLayout({

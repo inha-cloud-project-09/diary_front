@@ -55,9 +55,9 @@ export default function DashboardPage() {
         {/* 환영 메시지 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
-            안녕하세요, <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">감성 작가</span>님
+            안녕하세요. <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"></span>
           </h1>
-          <p className="text-gray-400">오늘도 당신의 이야기를 별에 담아보세요</p>
+          <p className="text-gray-400">오늘도 당신의 이야기를 기록해보세요</p>
         </div>
 
         {/* 통계 카드 */}
