@@ -31,10 +31,14 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
   }, [content])
 
   const formatText = (command: string, value?: string) => {
-    document.execCommand(command, false, value)
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML)
-      checkIfEmpty()
+    if (document.queryCommandSupported(command)) { // 지원 여부 확인
+      document.execCommand(command, false, value)
+      if (editorRef.current) {
+        onChange(editorRef.current.innerHTML)
+        checkIfEmpty()
+      }
+    } else {
+      console.error(`Command "${command}" is not supported.`)
     }
   }
 
@@ -71,7 +75,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="굵게"
             type="button"
           >
-            <Bold className="w-4 h-4" />
+            <Bold className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("italic")}
@@ -79,7 +83,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="기울임"
             type="button"
           >
-            <Italic className="w-4 h-4" />
+            <Italic className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("underline")}
@@ -87,7 +91,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="밑줄"
             type="button"
           >
-            <Underline className="w-4 h-4" />
+            <Underline className="w-4 h-4 text-blue-600" />
           </button>
         </div>
 
@@ -101,7 +105,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="왼쪽 정렬"
             type="button"
           >
-            <AlignLeft className="w-4 h-4" />
+            <AlignLeft className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("justifyCenter")}
@@ -109,7 +113,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="가운데 정렬"
             type="button"
           >
-            <AlignCenter className="w-4 h-4" />
+            <AlignCenter className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("justifyRight")}
@@ -117,7 +121,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="오른쪽 정렬"
             type="button"
           >
-            <AlignRight className="w-4 h-4" />
+            <AlignRight className="w-4 h-4 text-blue-600" />
           </button>
         </div>
 
@@ -131,7 +135,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="불릿 리스트"
             type="button"
           >
-            <List className="w-4 h-4" />
+            <List className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("insertOrderedList")}
@@ -139,7 +143,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="번호 리스트"
             type="button"
           >
-            <span className="text-sm font-bold">1.</span>
+            <span className="text-sm font-bold text-blue-600">1.</span> {/* 텍스트 색상을 파란색으로 변경 */}
           </button>
         </div>
 
@@ -153,7 +157,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="인용구"
             type="button"
           >
-            <Quote className="w-4 h-4" />
+            <Quote className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={() => formatText("formatBlock", "pre")}
@@ -161,7 +165,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="코드"
             type="button"
           >
-            <Code className="w-4 h-4" />
+            <Code className="w-4 h-4 text-blue-600" />
           </button>
           <button
             onClick={insertLink}
@@ -169,7 +173,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             title="링크"
             type="button"
           >
-            <Link className="w-4 h-4" />
+            <Link className="w-4 h-4 text-blue-600" />
           </button>
         </div>
 
@@ -183,12 +187,12 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
             className="w-8 h-8 rounded border border-slate-300 cursor-pointer"
             title="텍스트 색상"
           />
-          <input
+          {/* <input
             type="color"
             onChange={(e) => formatText("hiliteColor", e.target.value)}
             className="w-8 h-8 rounded border border-slate-300 cursor-pointer"
             title="배경 색상"
-          />
+          /> */}
         </div>
       </div>
 

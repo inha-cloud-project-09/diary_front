@@ -56,7 +56,6 @@ export default function Component() {
             likes: mock.likes ?? 0,
             comments: mock.comments ?? 0,
             date: new Date(mock.createdAt).toLocaleString("ko-KR"),
-            tags: Object.keys(mock.tags),
             stats: {
               likes: mock.likes ?? 0,
               comments: mock.comments ?? 0,
@@ -136,17 +135,6 @@ export default function Component() {
               </div>
             </div>
             {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {diaryData.tags?.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium"
-                >
-                  <Tag className="w-3 h-3 mr-1" />
-                  {tag}
-                </span>
-              ))}
-            </div>
           </div>
           {/* Article Content */}
           <div className="p-6 sm:p-8">

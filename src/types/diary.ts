@@ -6,7 +6,7 @@ export interface Diary {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
   createdAt: string
   updatedAt: string

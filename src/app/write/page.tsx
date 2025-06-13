@@ -9,49 +9,6 @@ import { RichTextEditor } from "../components/ui/rich-text-editor"
 
 export default function Component() {
   // 상태 정의
-  const [showSharingRooms, setShowSharingRooms] = useState(false)
-  const [userCluster, setUserCluster] = useState<string | null>(null)
-  const [availableClusters] = useState([
-    {
-      id: "emotional-wellness",
-      name: "감정 웰빙",
-      description: "감정 관리와 정신 건강에 관심이 있는 분들",
-      tags: ["감정", "불안", "스트레스", "힐링"],
-      memberCount: 127,
-      color: "bg-purple-100 text-purple-800",
-      isRecommended: true,
-    },
-    {
-      id: "daily-life",
-      name: "일상 공유",
-      description: "소소한 일상과 취미를 나누는 공간",
-      tags: ["일상", "취미", "음식", "여행"],
-      memberCount: 89,
-      color: "bg-blue-100 text-blue-800",
-      isRecommended: false,
-    },
-    {
-      id: "work-life",
-      name: "직장인 모임",
-      description: "직장 생활과 커리어에 대한 이야기",
-      tags: ["직장", "일", "성장", "목표"],
-      memberCount: 156,
-      color: "bg-green-100 text-green-800",
-      isRecommended: true,
-    },
-    {
-      id: "health-fitness",
-      name: "건강 관리",
-      description: "운동과 건강한 라이프스타일",
-      tags: ["운동", "건강", "피로", "수면"],
-      memberCount: 73,
-      color: "bg-orange-100 text-orange-800",
-      isRecommended: false,
-    },
-  ])
-  const [showClusterChangeAlert, setShowClusterChangeAlert] = useState(false)
-  const [suggestedCluster, setSuggestedCluster] = useState<string | null>(null)
-  const [showRecommendations, setShowRecommendations] = useState(false)
   const [oneLineDiaries, setOneLineDiaries] = useState<
     Array<{
       id: string
@@ -149,7 +106,7 @@ export default function Component() {
   // AI 도움 제안에 Wand2 아이콘 필요
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -165,15 +122,6 @@ export default function Component() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSharingRooms(true)}
-                className="hidden sm:flex"
-              >
-                <Users className="w-4 h-4 mr-2" />
-                나눔방
-              </Button>
               <Button variant="ghost" size="sm" onClick={() => setIsPreview(!isPreview)} className="hidden sm:flex">
                 {isPreview ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                 {isPreview ? "편집" : "미리보기"}
