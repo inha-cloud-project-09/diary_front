@@ -31,7 +31,7 @@ import { mockCommunities } from "@/mock/community"
 
 export default function SharingRoomsPage() {
   const { user: currentUser, isLoading: isUserLoading, setUser } = useUser()
-  const [activeTab, setActiveTab] = useState<"my-rooms" | "recommended" | "all" | "trending">("my-rooms")
+  const [activeTab, setActiveTab] = useState<"my-rooms" | "recommended" | "all">("my-rooms")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [showCreateRoom, setShowCreateRoom] = useState(false)
@@ -247,13 +247,6 @@ export default function SharingRoomsPage() {
       .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0))
   }
 
-  // 트렌딩 클러스터 (성장률 기준)
-  const getTrendingCommunities = () => {
-    return communities
-      .filter((community) => !community.isJoined)
-      .sort((a, b) => b.memberCount - a.memberCount)
-  }
-
   // 필터링된 클러스터
   const getFilteredCommunities = () => {
     let filtered = allCommunities
@@ -327,17 +320,6 @@ export default function SharingRoomsPage() {
           >
             <Sparkles className="w-4 h-4 mr-2" />
             추천
-          </button>
-          <button
-            onClick={() => setActiveTab("trending")}
-            className={`flex-1 flex items-center justify-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
-              activeTab === "trending"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-            }`}
-          >
-            <TrendingUp className="w-4 h-4 mr-2" />
-            트렌딩
           </button>
           <button
             onClick={() => setActiveTab("all")}
@@ -528,48 +510,6 @@ export default function SharingRoomsPage() {
                     >
                       참여하기
                       <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 트렌딩 나눔방 */}
-          {activeTab === "trending" && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-slate-900">지금 뜨는 나눔방</h2>
-                <span className="text-sm text-slate-500">성장률 기준</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getTrendingCommunities().map((community, index) => (
-                  <div key={community.id} className="bg-white rounded-lg border border-slate-200 p-6">
-                    <div className="flex items-center space-x-2 mb-3">
-                      <div className="flex items-center justify-center w-6 h-6 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">
-                        {index + 1}
-                      </div>
-                      <h3 className="font-semibold text-slate-900">{community.name}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs ${community.color}`}>{community.memberCount}명</span>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-3">{community.description}</p>
-                    <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
-                      <span className="flex items-center">
-                        <TrendingUp className="w-3 h-3 mr-1 text-green-500" />
-                        주간 +{community.weeklyGrowth}%
-                      </span>
-                      <span className="flex items-center">
-                        <Activity className="w-3 h-3 mr-1" />
-                        활성 {community.activeMembers}명
-                      </span>
-                    </div>
-                    <Button
-                      onClick={() => handleJoinCommunity(community)}
-                      variant="outline"
-                      className="w-full text-blue-600 border-blue-200 hover:bg-blue-50"
-                    >
-                      참여하기
                     </Button>
                   </div>
                 ))}

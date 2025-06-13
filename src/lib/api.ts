@@ -207,7 +207,7 @@ export const communityAPI = {
     return response.data
   },
 
-  // 감정 테마별 커뮤니티 조회
+  // 감정 테마별 커뮤니티 조회 -> 사용하지 않기로 함
   getCommunitiesByEmotionTheme: async (emotionTheme: string): Promise<ApiResponse<Community[]>> => {
     const response = await api.get<ApiResponse<Community[]>>(`/communities/emotion-theme/${emotionTheme}`)
     return response.data
