@@ -1,62 +1,31 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "../components/ui/button"
 import {
-  ArrowLeft, Type, Smile, Tag, Save, Eye, EyeOff, Calendar, Clock, MapPin, Filter, Users, Download, Hash, Wand2
+  ArrowLeft, Tag, Save, Eye, EyeOff, Calendar, Filter, Download, Hash, Wand2
 } from 'lucide-react'
 import { RichTextEditor } from "../components/ui/rich-text-editor"
+import { mockOneLinerDiaries } from "@/mock/diary"
+import { oneLineDiaryAPI, diaryAPI } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 export default function Component() {
   // 상태 정의
-  const [oneLineDiaries, setOneLineDiaries] = useState<
-    Array<{
-      id: string
-      text: string
-      timestamp: Date
-      mood?: string
-      tags: string[]
-      isPublic: boolean
-    }>
-  >([
-    {
-      id: "1",
-      text: "오늘 친구와 맛있는 커피를 마셨다",
-      timestamp: new Date(),
-      mood: "happy",
-      tags: ["일상", "친구"],
-      isPublic: true,
-    },
-    {
-      id: "2",
-      text: "새로운 프로젝트 시작이 설렌다",
-      timestamp: new Date(),
-      mood: "excited",
-      tags: ["일", "설렘"],
-      isPublic: false,
-    },
-    {
-      id: "3",
-      text: "비 오는 날씨가 우울하다",
-      timestamp: new Date(),
-      mood: "sad",
-      tags: ["감정", "날씨"],
-      isPublic: true,
-    },
-  ])
+  const [oneLineDiaries, setOneLineDiaries] = useState<any[]>([])
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
-  const [selectedMood, setSelectedMood] = useState("")
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState("")
   const [isPreview, setIsPreview] = useState(false)
-  const [location, setLocation] = useState("")
   const [isPublic, setIsPublic] = useState(false)
   const [showPrivacyFilter, setShowPrivacyFilter] = useState(false)
   const [filteredContent, setFilteredContent] = useState("")
   const [showAIHelp, setShowAIHelp] = useState(false)
   const [aiSuggestion, setAiSuggestion] = useState("")
   const [lastCursorActivity, setLastCursorActivity] = useState(Date.now())
+
+  const router = useRouter()
 
   const moods = [
     { emoji: "😊", label: "행복", value: "happy", color: "bg-yellow-100 text-yellow-800" },
@@ -102,8 +71,54 @@ export default function Component() {
 
   const { date, time } = getCurrentDateTime()
 
-  // 태그 입력란에 Hash 아이콘 필요
-  // AI 도움 제안에 Wand2 아이콘 필요
+  useEffect(() => {
+    const fetchOneLineDiaries = async () => {
+      try {
+        const res = await oneLineDiaryAPI.getMyOneLineDiaries()
+        setOneLineDiaries(
+          res.data.map((d: any) => ({
+            id: d.id.toString(),
+            text: d.content,
+            timestamp: new Date(d.createdAt),
+            mood: d.primaryEmotion,
+            tags: d.tags,
+            isPublic: d.isPublic
+          }))
+        )
+      } catch {
+        setOneLineDiaries(
+          mockOneLinerDiaries.map((d) => ({
+            id: d.id.toString(),
+            text: d.content,
+            timestamp: new Date(d.createdAt),
+            mood: d.primaryEmotion,
+            tags: d.tags,
+            isPublic: d.isPublic
+          }))
+        )
+      }
+    }
+    fetchOneLineDiaries()
+  }, [])
+
+  // Button, event, state 등 기존 코드 유지
+
+  // map 콜백 파라미터에 타입 명시
+  const handleSave = async () => {
+    try {
+      await diaryAPI.createDiary({
+        title,
+        content,
+        primaryEmotion: "",
+        secondaryEmotions: [],
+        tags: tags,
+        isPublic,
+      })
+      router.push("/dashboard")
+    } catch (e) {
+      alert("저장에 실패했습니다.")
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -111,7 +126,12 @@ export default function Component() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="p-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-2 cursor-pointer"
+                onClick={() => router.back()}
+              >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
@@ -126,7 +146,10 @@ export default function Component() {
                 {isPreview ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                 {isPreview ? "편집" : "미리보기"}
               </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={handleSave}
+              >
                 <Save className="w-4 h-4 mr-2" />
                 저장
               </Button>
@@ -150,11 +173,12 @@ export default function Component() {
                     </span>
                     {diary.mood && <span className="text-sm">{moods.find((m) => m.value === diary.mood)?.emoji}</span>}
                     <div className="flex space-x-1">
-                      {diary.tags.map((tag) => (
+                      {(diary.tags ?? []).map((tag: string) => (
                         <span key={tag} className="text-xs px-2 py-1 rounded bg-slate-100 text-slate-700">
                           #{tag}
                         </span>
                       ))}
+                      // ...existing code...
                     </div>
                     <span
                       className={`text-xs px-2 py-1 rounded ${diary.isPublic ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}
@@ -194,16 +218,6 @@ export default function Component() {
               <div className="flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
                 <span>{date}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="위치"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="bg-transparent border-none outline-none placeholder-slate-400"
-                />
               </div>
             </div>
 
@@ -264,30 +278,6 @@ export default function Component() {
               )}
             </div>
 
-            {/* 감정 선택 */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium text-slate-900 flex items-center">
-                <Smile className="w-5 h-5 mr-2 text-yellow-500" />
-                오늘의 기분
-              </h3>
-              <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
-                {moods.map((mood) => (
-                  <button
-                    key={mood.value}
-                    onClick={() => setSelectedMood(mood.value)}
-                    className={`flex flex-col items-center space-y-2 p-3 rounded-lg border-2 transition-all ${
-                      selectedMood === mood.value
-                        ? `border-blue-500 ${mood.color}`
-                        : "border-slate-200 hover:border-slate-300 bg-white"
-                    }`}
-                  >
-                    <span className="text-2xl">{mood.emoji}</span>
-                    <span className="text-xs font-medium">{mood.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* 태그 입력 */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-slate-900 flex items-center">
@@ -300,6 +290,7 @@ export default function Component() {
                     type="text"
                     placeholder="태그를 입력하세요..."
                     value={newTag}
+                    style= {{ color: "#111827" }}
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && addTag(newTag)}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -467,13 +458,7 @@ export default function Component() {
               <div className="flex flex-wrap gap-4 text-sm text-slate-600">
                 <span>{date}</span>
                 <span>{time}</span>
-                {location && <span>📍 {location}</span>}
-                {selectedMood && (
-                  <span className="flex items-center space-x-1">
-                    <span>{moods.find((m) => m.value === selectedMood)?.emoji}</span>
-                    <span>{moods.find((m) => m.value === selectedMood)?.label}</span>
-                  </span>
-                )}
+                {/* 위치 출력 제거됨 */}
               </div>
             </div>
             <div className="prose prose-slate max-w-none">

@@ -207,7 +207,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = "내용을 입
           onInput={handleInput}
           onBlur={handleInput}
           className="min-h-[300px] p-4 outline-none prose prose-slate max-w-none"
-          style={{ wordBreak: "break-word" }}
+          style={{ wordBreak: "break-word", color: "#111827" }} // 검정색(=tailwind text-slate-900)
         />
       </div>
     </div>

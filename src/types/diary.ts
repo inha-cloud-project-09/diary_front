@@ -20,7 +20,7 @@ export interface OneLineDiary {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
   createdAt: string
   updatedAt: string
@@ -32,7 +32,7 @@ export interface CreateDiaryRequest {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
 }
 
@@ -41,7 +41,7 @@ export interface UpdateDiaryRequest {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
 }
 
@@ -49,7 +49,7 @@ export interface CreateOneLineDiaryRequest {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
 }
 
@@ -57,6 +57,6 @@ export interface UpdateOneLineDiaryRequest {
   content: string
   primaryEmotion: string
   secondaryEmotions: string[]
-  tags: Record<string, string>
+  tags: string[]
   isPublic: boolean
 }
